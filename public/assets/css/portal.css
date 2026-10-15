@@ -1,0 +1,1263 @@
+/* ==========================================================================
+   MotoRepair Pro - portal.css
+   One shared stylesheet for the admin, customer and mechanic portals
+   (replaces the <style> block that was copy-pasted into each page).
+
+   Place at:   public/css/portal.css
+   Link with:  <link rel="stylesheet" href="/css/portal.css">
+   Load AFTER Bootstrap + Font Awesome, e.g.:
+       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+       <link rel="stylesheet" href="/css/portal.css">
+
+   Sections:
+     1. Tokens & base          5. Tables
+     2. Layout shell           6. Buttons
+     3. Cards & panels         7. Forms
+     4. Stat cards             8. Badges, alerts, progress
+                               9. Page-specific components
+                              10. Print
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. TOKENS & BASE
+   ========================================================================== */
+
+:root {
+    --primary-color: #e67e22;
+    --primary-dark: #c8641a;
+    --ink: #16171a;
+    --surface: #202227;
+    --surface-raised: #2a2c33;
+    --chrome: #cfd3d8;
+    --chrome-dim: #7d828a;
+    --text: #edeff1;
+    --text-muted: #9a9ea5;
+    --border-steel: rgba(207, 211, 216, 0.12);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--ink);
+    color: var(--text);
+    overflow-x: hidden;
+}
+
+
+/* ==========================================================================
+   2. LAYOUT SHELL  (sidebar + top bar + content area)
+   ========================================================================== */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 280px;
+    background: linear-gradient(135deg, var(--surface) 0%, var(--ink) 100%);
+    color: white;
+    transition: all 0.3s;
+    z-index: 1000;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.4);
+    border-right: 1px solid var(--border-steel);
+}
+
+.sidebar-header {
+    padding: 25px 20px;
+    border-bottom: 1px solid var(--border-steel);
+    text-align: center;
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--text);
+}
+
+.sidebar-header p {
+    margin: 5px 0 0;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    color: var(--text-muted);
+}
+
+.sidebar-menu {
+    padding: 20px 0;
+}
+
+.menu-item {
+    padding: 12px 25px;
+    margin: 5px 0;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    border-left: 3px solid transparent;
+}
+
+.menu-item:hover {
+    background: rgba(255,255,255,0.06);
+    color: white;
+    border-left-color: var(--primary-color);
+}
+
+.menu-item.active {
+    background: rgba(230, 126, 34, 0.15);
+    color: var(--primary-color);
+    border-left-color: var(--primary-color);
+}
+
+.menu-item i {
+    width: 25px;
+    font-size: 1.2rem;
+}
+
+.main-content {
+    margin-left: 280px;
+    transition: all 0.3s;
+}
+
+.top-navbar {
+    background: var(--surface);
+    padding: 15px 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    border-bottom: 1px solid var(--border-steel);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
+
+.page-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--text);
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.dropdown-menu-custom {
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background: var(--surface-raised);
+    border: 1px solid var(--border-steel);
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 1000;
+}
+
+.dropdown-menu-custom.show {
+    display: block;
+}
+
+/* Mobile: sidebar slides in, toggle button appears */
+
+@media (max-width: 768px) {
+    .sidebar {
+        left: -280px;
+    }
+
+    .sidebar.active {
+        left: 0;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .menu-toggle {
+        display: block;
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1001;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .top-navbar {
+        padding-left: 70px;
+    }
+}
+
+@media (min-width: 769px) {
+    .menu-toggle {
+        display: none;
+    }
+}
+
+
+/* ==========================================================================
+   3. CARDS & PANELS
+   ========================================================================== */
+
+.card-custom {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}
+
+.card-custom h5 {
+    color: var(--text);
+}
+
+/* card-custom with its own header/body (admin dashboard) */
+
+.card-custom:has(> .card-header) {
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.card-custom .card-header, .table-container .card-header {
+    background: var(--surface-raised);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-steel);
+    color: var(--text);
+    font-weight: 600;
+}
+
+.card-custom .card-body {
+    padding: 20px;
+}
+
+.table-container {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.table-container:has(> .card-header) {
+    padding: 0;
+    overflow: hidden;
+}
+
+.filter-bar {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+/* info-card: dark panel (mechanic work page + admin repair details) */
+
+.info-card {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+.info-card h5 {
+    color: var(--text);
+}
+
+.info-card .text-muted-custom {
+    color: var(--text-muted);
+}
+
+.info-card:has(> .info-card-header) {
+    padding: 0;
+    overflow: hidden;
+}
+
+.info-card-header {
+    border-bottom: 1px solid var(--border-steel);
+    font-weight: 600;
+    padding: 15px 20px;
+}
+
+.info-card-body {
+    padding: 20px;
+}
+
+/* Customer: booking form card vs. bookings list card (list cards carry data-status) */
+
+.booking-card {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    margin-top: 20px;
+    color: var(--text);
+}
+
+.booking-card .text-muted {
+    color: var(--text-muted) !important;
+}
+
+.booking-card[data-status] {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    overflow: hidden;
+    transition: all 0.3s;
+    color: var(--text);
+    padding: 0;
+    margin-top: 0;
+}
+
+.booking-card[data-status]:hover {
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+.booking-header {
+    background: var(--surface-raised);
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--border-steel);
+    cursor: pointer;
+    color: var(--text);
+}
+
+.booking-body {
+    padding: 20px;
+    display: none;
+}
+
+.booking-body.show {
+    display: block;
+}
+
+.booking-body .text-muted, .booking-body p.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.booking-body .table {
+    color: var(--text);
+}
+
+.booking-body .table td, .booking-body .table th {
+    border-color: var(--border-steel) !important;
+}
+
+.booking-body .bg-light {
+    background-color: var(--surface-raised) !important;
+    color: var(--text);
+}
+
+.booking-body .table-active {
+    --bs-table-accent-bg: var(--surface-raised);
+    color: var(--text);
+}
+
+.track-card {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    margin-top: 20px;
+    color: var(--text);
+}
+
+.track-card .bg-light {
+    background-color: var(--surface-raised) !important;
+    color: var(--text);
+}
+
+.service-card {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    transition: transform 0.3s, border-color 0.3s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    margin-bottom: 20px;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+}
+
+
+/* ==========================================================================
+   4. STAT CARDS
+   ========================================================================== */
+
+.stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s;
+    color: var(--text);
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--primary-color);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.stat-card h3 {
+    margin-bottom: 4px;
+}
+
+/* Cards without an icon (just a number + label) are centred */
+
+.stat-card:not(:has(.stat-icon)) {
+    text-align: center;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .stat-card:not(:has(.stat-icon)) {
+        margin-bottom: 15px;
+    }
+}
+
+
+/* ==========================================================================
+   5. TABLES
+   ========================================================================== */
+
+.table-custom {
+    color: var(--text);
+    margin-bottom: 0;
+}
+
+.table-custom thead th {
+    border-bottom: 2px solid var(--border-steel);
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table-custom tbody td {
+    border-bottom: 1px solid var(--border-steel);
+    vertical-align: middle;
+    padding: 12px 10px;
+}
+
+.table-custom tbody tr:hover {
+    background: rgba(255,255,255,0.03);
+}
+
+.table-custom tbody tr:last-child td {
+    border-bottom: none;
+}
+
+@media (max-width: 768px) {
+    .table-responsive-custom {
+        overflow-x: auto;
+    }
+}
+
+.table-parts {
+    color: var(--text);
+}
+
+.table-parts thead th {
+    border-bottom: 2px solid var(--border-steel);
+    color: var(--text-muted);
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+
+.table-parts tbody td {
+    border-bottom: 1px solid var(--border-steel);
+    padding: 8px 10px;
+}
+
+.table-parts tfoot th {
+    border-top: 2px solid var(--border-steel);
+    color: var(--text);
+    padding: 10px;
+}
+
+.repair-row {
+    border-bottom: 1px solid var(--border-steel);
+    transition: background 0.2s;
+    color: var(--text);
+}
+
+.repair-row:hover {
+    background: rgba(255,255,255,0.03);
+}
+
+.repair-row:last-child {
+    border-bottom: none;
+}
+
+
+/* ==========================================================================
+   6. BUTTONS
+   ========================================================================== */
+
+/* Primary / secondary (full size) */
+
+.btn-primary-custom {
+    background: var(--primary-color);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 8px 20px;
+    transition: all 0.2s;
+}
+
+.btn-primary-custom:hover {
+    background: var(--primary-dark);
+    color: white;
+}
+
+.btn-primary-custom:not(.btn) {
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 13px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary-custom {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-steel);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 20px;
+    transition: all 0.2s;
+}
+
+.btn-secondary-custom:hover {
+    background: var(--border-steel);
+    color: white;
+}
+
+.btn-back {
+    background: var(--surface-raised);
+    border: 1px solid var(--border-steel);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 20px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.2s;
+}
+
+.btn-back:hover {
+    background: var(--border-steel);
+    color: white;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    border-radius: 8px;
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(230,126,34,0.3);
+}
+
+/* Small action buttons (tables) */
+
+.btn-sm-custom, .btn-work, .btn-assign {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-sm-custom:hover, .btn-work:hover, .btn-assign:hover {
+    background: var(--primary-dark);
+    color: white;
+}
+
+.btn-sm-disabled, .btn-work-disabled {
+    background: var(--surface-raised);
+    color: var(--text-muted);
+    border: 1px solid var(--border-steel);
+    padding: 5px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    display: inline-block;
+    cursor: not-allowed;
+}
+
+.btn-info-custom, .btn-danger-custom, .btn-success-custom, .btn-warning-custom, .btn-edit-custom {
+    border: none;
+    color: white;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 13px;
+    transition: all 0.2s;
+}
+
+.btn-info-custom {
+    background: #0d6efd;
+}
+
+.btn-info-custom:hover {
+    background: #0b5ed7;
+    color: white;
+}
+
+.btn-danger-custom {
+    background: #dc3545;
+}
+
+.btn-danger-custom:hover {
+    background: #bb2d3b;
+    color: white;
+}
+
+.btn-success-custom {
+    background: #198754;
+}
+
+.btn-success-custom:hover {
+    background: #157347;
+    color: white;
+}
+
+.btn-warning-custom, .btn-edit-custom {
+    background: #ffc107;
+    color: #000;
+}
+
+.btn-warning-custom:hover, .btn-edit-custom:hover {
+    background: #e0a800;
+    color: #000;
+}
+
+/* Inside the mechanic work page the warning button is the main action */
+
+.info-card .btn-warning-custom {
+    background: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    padding: 8px 20px;
+    font-size: inherit;
+}
+
+.info-card .btn-warning-custom:hover {
+    background: var(--primary-dark);
+    color: white;
+}
+
+/* Repair-details add / update / remove */
+
+.btn-add, .btn-add-multiple, .btn-update {
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    color: white;
+}
+
+.btn-add, .btn-add-multiple {
+    background: #198754;
+}
+
+.btn-add:hover, .btn-add-multiple:hover {
+    background: #157347;
+}
+
+.btn-update {
+    background: #ffc107;
+    color: #000;
+}
+
+.btn-update:hover {
+    background: #e0a800;
+}
+
+.btn-remove-part {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* Full-width form buttons (inventory + mechanics forms) */
+
+.btn-primary-custom[name="save_part"], .btn-primary-custom[name="add_mechanic"] {
+    width: 100%;
+}
+
+.btn-secondary-custom[href$="inventory.php"], .btn-secondary-custom[href$="mechanics.php"] {
+    width: 100%;
+    margin-top: 8px;
+}
+
+
+/* ==========================================================================
+   7. FORMS
+   ========================================================================== */
+
+.form-control, .form-select, .form-control-dark, .form-select-dark, .form-control-custom {
+    background-color: var(--surface-raised);
+    border: 1px solid var(--border-steel);
+    color: var(--text);
+    border-radius: 8px;
+}
+
+.form-control:focus, .form-select:focus, .form-control-dark:focus, .form-select-dark:focus, .form-control-custom:focus {
+    background-color: var(--surface-raised);
+    border-color: var(--primary-color);
+    color: var(--text);
+    box-shadow: 0 0 0 0.2rem rgba(230, 126, 34, 0.25);
+}
+
+.form-control::placeholder, .form-control-dark::placeholder, .form-control-custom::placeholder {
+    color: var(--text-muted);
+}
+
+.form-select option {
+    background-color: var(--surface-raised);
+    color: var(--text);
+}
+
+/* Light dropdown arrow (Bootstrap default is dark grey, invisible on dark inputs) */
+
+.form-select, .form-select-dark {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23cfd3d8' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+/* Roomier inputs on the customer booking form */
+
+.booking-card .form-control, .booking-card .form-select {
+    padding: 10px 15px;
+}
+
+
+/* ==========================================================================
+   8. BADGES, ALERTS, PROGRESS
+   ========================================================================== */
+
+/* Status badges: one palette for every portal */
+
+.status-badge, .badge-custom {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.status-pending, .badge-pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.status-accepted, .badge-accepted {
+    background: rgba(13, 202, 240, 0.2);
+    color: #0dcaf0;
+}
+
+.status-in_progress, .badge-in_progress {
+    background: rgba(13, 110, 253, 0.2);
+    color: #0d6efd;
+}
+
+.status-completed, .badge-completed {
+    background: rgba(25, 135, 84, 0.2);
+    color: #198754;
+}
+
+.status-cancelled, .badge-cancelled {
+    background: rgba(220, 53, 69, 0.2);
+    color: #ea868f;
+}
+
+.status-idle {
+    background: rgba(13, 202, 240, 0.2);
+    color: #0dcaf0;
+}
+
+.status-active {
+    background: rgba(25, 135, 84, 0.2);
+    color: #198754;
+}
+
+.status-busy {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.filter-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-left: 6px;
+}
+
+.filter-badge-active {
+    background: rgba(230, 126, 34, 0.2);
+    color: var(--primary-color);
+}
+
+.filter-badge-completed {
+    background: rgba(25, 135, 84, 0.2);
+    color: #198754;
+}
+
+.filter-btn {
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background: var(--surface-raised);
+    color: var(--text-muted);
+    border: 1px solid var(--border-steel);
+    display: inline-block;
+}
+
+.filter-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.text-muted-custom {
+    color: var(--text-muted);
+}
+
+/* Alerts */
+
+.alert-custom-success {
+    background: rgba(25, 135, 84, 0.15);
+    border: 1px solid rgba(25, 135, 84, 0.3);
+    color: #75b798;
+    border-radius: 8px;
+}
+
+.alert-custom-danger {
+    background: rgba(220, 53, 69, 0.15);
+    border: 1px solid rgba(220, 53, 69, 0.3);
+    color: #ea868f;
+    border-radius: 8px;
+}
+
+.alert-warning-custom {
+    background: rgba(255, 193, 7, 0.15);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    color: #ffc107;
+    border-radius: 8px;
+}
+
+.alert-info-custom {
+    background: rgba(13, 110, 253, 0.1);
+    border: 1px solid rgba(13, 110, 253, 0.2);
+    color: #6ea8fe;
+    border-radius: 8px;
+    padding: 12px 16px;
+}
+
+.alert-success-custom {
+    background: rgba(25, 135, 84, 0.1);
+    border: 1px solid rgba(25, 135, 84, 0.2);
+    color: #75b798;
+    border-radius: 8px;
+    padding: 16px;
+}
+
+.edit-mode-banner {
+    background: rgba(255, 193, 7, 0.15);
+    border: 1px solid rgba(255, 193, 7, 0.3);
+    border-left: 4px solid #ffc107;
+    padding: 10px 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text);
+}
+
+/* Progress bars */
+
+.progress-custom {
+    background: var(--surface-raised);
+    border-radius: 8px;
+    height: 6px;
+}
+
+.progress-custom .progress-bar {
+    border-radius: 8px;
+}
+
+.info-card .progress-custom .progress-bar {
+    background: var(--primary-color);
+}
+
+td .progress-custom {
+    width: 60px;
+    height: 5px;
+}
+
+.booking-card .progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: var(--ink);
+}
+
+.track-card .progress {
+    height: 30px;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: var(--surface-raised);
+}
+
+.track-card .progress-bar {
+    font-weight: 600;
+    line-height: 30px;
+}
+
+
+/* ==========================================================================
+   9. PAGE-SPECIFIC COMPONENTS
+   ========================================================================== */
+
+/* Avatars / icon circles */
+
+.customer-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.customer-avatar-large {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+.mechanic-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.service-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    color: white;
+    font-size: 1.8rem;
+}
+
+/* Customer: tracking timeline */
+
+.status-timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.status-timeline:before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-steel);
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 25px;
+}
+
+.timeline-content strong {
+    color: var(--text);
+}
+
+.timeline-content p.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: -26px;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--chrome-dim);
+    border: 2px solid var(--ink);
+    box-shadow: 0 0 0 2px var(--chrome-dim);
+}
+
+.timeline-dot.completed {
+    background: #28a745;
+    box-shadow: 0 0 0 2px #28a745;
+}
+
+.timeline-dot.active {
+    background: var(--primary-color);
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+/* Mechanic: notes + breadcrumb */
+
+.notes-history {
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--surface-raised);
+    padding: 12px;
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 14px;
+    white-space: pre-wrap;
+    border: 1px solid var(--border-steel);
+}
+
+.breadcrumb-custom {
+    background: transparent;
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.breadcrumb-custom .breadcrumb-item a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.breadcrumb-custom .breadcrumb-item a:hover {
+    color: var(--primary-dark);
+}
+
+.breadcrumb-custom .breadcrumb-item.active {
+    color: var(--text-muted);
+}
+
+.breadcrumb-custom .breadcrumb-item + .breadcrumb-item::before {
+    color: var(--text-muted);
+}
+
+.list-tips i {
+    color: #198754;
+}
+
+.list-tips li {
+    padding: 4px 0;
+    color: var(--text-muted);
+}
+
+/* Admin: modal (jobs) */
+
+.modal-content-custom {
+    background: var(--surface);
+    border: 1px solid var(--border-steel);
+    color: var(--text);
+    border-radius: 12px;
+}
+
+.modal-content-custom .modal-header {
+    border-bottom: 1px solid var(--border-steel);
+}
+
+.modal-content-custom .modal-footer {
+    border-top: 1px solid var(--border-steel);
+}
+
+.modal-content-custom .btn-close {
+    filter: invert(1);
+}
+
+/* Admin: repair details (parts list + toast) */
+
+.part-row {
+    background: var(--surface-raised);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    min-width: 300px;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(100%); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Bootstrap utilities that default to light colours, re-themed inside info-cards */
+
+.info-card .bg-light {
+    background-color: var(--surface-raised) !important;
+    color: var(--text);
+}
+
+.info-card .text-muted {
+    color: var(--text-muted) !important;
+}
+
+.info-card .table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: transparent;
+    color: var(--text);
+    border-color: var(--border-steel);
+}
+
+.info-card .table-light, .info-card .table-info {
+    --bs-table-bg: var(--surface-raised);
+    color: var(--text);
+    border-color: var(--border-steel);
+}
+
+.info-card .table td, .info-card .table th {
+    border-color: var(--border-steel) !important;
+}
+
+/* Customer home: hero + footer */
+
+.hero-section {
+    position: relative;
+    background: linear-gradient(135deg, #2c2f36, var(--ink) 70%);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+    overflow: hidden;
+}
+
+.hero-section::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 6px;
+    background: repeating-linear-gradient( 135deg, var(--primary-color) 0px, var(--primary-color) 14px, var(--ink) 14px, var(--ink) 28px );
+}
+
+.hero-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.footer {
+    background: var(--surface);
+    border-top: 1px solid var(--border-steel);
+    color: var(--text);
+    padding: 30px 0;
+    margin-top: 50px;
+}
+
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 1.8rem;
+    }
+}
+
+
+/* ==========================================================================
+   10. PRINT
+   ========================================================================== */
+
+@media print {
+    .sidebar, .menu-toggle, .top-navbar, .filter-bar button, .btn-print {
+        display: none !important;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+}
